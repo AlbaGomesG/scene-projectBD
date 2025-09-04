@@ -36,4 +36,18 @@ const createUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers, getUser, createUser };
+const updateUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const updateUser = await userModel.updateUser(req.params.id, name, email, password);
+        if (!updateUser) {
+            return res.status(404).json({ message: "O usuário que você está tentando atualizar não foi encontrado."});
+        }
+        res.json(updateUser);
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ message: "Erro ao atualizar esse usuário."});
+    }
+};
+
+module.exports = { getAllUsers, getUser, createUser, updateUser };
