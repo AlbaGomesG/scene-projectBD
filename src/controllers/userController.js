@@ -21,4 +21,19 @@ const getUser = async (req, res) => {
     }
 };
 
-module.exports = { getAllUsers, getUser };
+const createUser = async (req, res) => {
+    try {
+        const { name, email, password } = req.body;
+        const perfil_photo = req.file ? req.file.filename : null;
+        const newUser = await userModel.createUser(name, email, password, perfil_photo);
+        res.status(201).json(newUser);
+    } catch (error) {
+        console.log(error);
+        if (error.code === "23505") {
+            return res.status(400).json({ message: "Esse email já está cadastrado no nosso sistema."});
+        }
+        res.status(500).json({ message: "Erro ao criar usuário 👤"});
+    }
+};
+
+module.exports = { getAllUsers, getUser, createUser };

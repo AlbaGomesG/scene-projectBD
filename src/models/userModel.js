@@ -10,4 +10,11 @@ const getUserById = async (id) => {
     return result.rows[0];
 };
 
-module.exports = { getUsers, getUserById };
+const createUser = async (name, email, password, perfil_photo) => {
+    const result = await pool.query("INSERT INTO users (name, email, password, perfil_photo) VALUES ($1, $2, $3, $4) RETURNING *",
+        [name, email, password, perfil_photo]
+    );
+    return result.rows[0];
+};
+
+module.exports = { getUsers, getUserById, createUser };
